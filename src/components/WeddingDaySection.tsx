@@ -8,10 +8,9 @@ const schedule = [
 export default function WeddingDaySection({ image }: { image: string }) {
   return (
     <section id="wedding-day" className="fade-section grid md:grid-cols-2">
-      <div
-        className="image-reveal parallax-image min-h-[420px] md:min-h-[600px] bg-cover bg-center"
-        style={{ backgroundImage: `url(${image})` }}
-      />
+      <div className="image-reveal parallax-image relative min-h-[420px] md:min-h-[600px] overflow-hidden">
+        <img src={image} alt="Wedding day" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-center" />
+      </div>
       <div className="bg-[#F6F1E7] px-6 md:px-16 py-16 flex flex-col justify-center">
         <p className="text-xs tracking-[0.25em] text-stone-400 mb-3">
           The Wedding Day

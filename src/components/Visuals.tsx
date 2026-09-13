@@ -10,10 +10,12 @@ export function Polaroid({
   src,
   caption,
   className = "",
+  eager = false,
 }: {
   src: string;
   caption?: string;
   className?: string;
+  eager?: boolean;
 }) {
   return (
     <div className={`bg-amber-50 p-2 pb-4 shadow-xl ${className}`}>
@@ -21,6 +23,8 @@ export function Polaroid({
         src={src}
         alt={caption ?? ""}
         className="w-full h-full object-cover"
+        loading={eager ? "eager" : "lazy"}
+        decoding="async"
       />
       {caption && (
         <p className="mt-2 text-center text-[13px] text-stone-500 font-script">
