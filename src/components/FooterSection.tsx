@@ -4,8 +4,9 @@ export default function FooterSection({ image }: { image: string }) {
   return (
     <footer
       className="fade-section relative min-h-[420px] flex items-center justify-center bg-cover bg-center text-center px-6"
-      style={{ backgroundImage: `url(${image})` }}
+      
     >
+      <img src={image} alt="Wedding celebration" loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-center" />
       <div className="absolute inset-0 bg-black/40" />
       <div className="footer-content relative z-10 text-white max-w-lg">
         <p className="text-sm tracking-widest mb-4 text-white/80">
