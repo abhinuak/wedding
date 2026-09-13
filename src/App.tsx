@@ -1,22 +1,34 @@
-import { useState } from "react";
-import bannerImage from "./assets/images/BannerImage.jpg"
+import { useEffect, useState } from "react";
+import bannerImage from "./assets/images/BannerImage.jpg";
+import Lenis from "lenis";
+import oldPic from "./assets/images/oldpic.jpg";
+import wedday from "./assets/images/wedday.jpg";
+import wedday1 from "./assets/images/WhatsApp Image 2026-09-13 at 11.47.14 AM.jpeg";
+import wedday2 from "./assets/images/WhatsApp Image 2026-09-13 at 11.47.15 AM.jpeg";
+import wedday3 from "./assets/images/WhatsApp Image 2026-09-13 at 11.47.16 AM (1).jpeg";
+import wedday4 from "./assets/images/WhatsApp Image 2026-09-13 at 11.47.16 AM.jpeg";
+import wedday6 from "./assets/images/aa.jpeg";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import gsap from "gsap";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // ─── Placeholder images — swap these for your own later ───
 const IMG = {
   hero: bannerImage,
-  story: "https://picsum.photos/id/1005/600/480",
-  timelineNote: "https://picsum.photos/id/1039/300/300",
-  collage1: "https://picsum.photos/id/1011/500/400",
-  collage2: "https://picsum.photos/id/1012/420/340",
-  collage3: "https://picsum.photos/id/1013/460/360",
-  collage4: "https://picsum.photos/id/1016/420/500",
-  collage5: "https://picsum.photos/id/1018/460/340",
-  wedding: "https://picsum.photos/id/1027/700/900",
-  gallery1: "https://picsum.photos/id/1035/360/460",
-  gallery2: "https://picsum.photos/id/1036/360/460",
-  gallery3: "https://picsum.photos/id/1037/360/460",
-  gallery4: "https://picsum.photos/id/1038/360/460",
-  footer: "https://picsum.photos/id/1043/1600/900",
+  story: oldPic,
+
+  collage1: oldPic,
+  collage2: wedday2,
+  collage3: wedday1,
+  collage4: wedday4,
+  collage5: wedday,
+  wedding: wedday,
+  gallery1: wedday1,
+  gallery2: wedday2,
+  gallery3: wedday3,
+  gallery4: wedday4,
+  footer: wedday6,
 };
 
 const NAV_LINKS = [
@@ -28,11 +40,23 @@ const NAV_LINKS = [
 ];
 
 const TIMELINE = [
-  { year: "2016", title: "The First Hello", desc: "Met at the tuition centre." },
+  {
+    year: "2016",
+    title: "The First Hello",
+    desc: "Met at the tuition centre.",
+  },
   { year: "2018", title: "Growing Together", desc: "More than just friends." },
-  { year: "2020", title: "Through Everything", desc: "Challenges, distance, and still choosing each other." },
+  {
+    year: "2020",
+    title: "Through Everything",
+    desc: "Challenges, distance, and still choosing each other.",
+  },
   { year: "2023", title: "Still Us", desc: "Stronger, kinder, closer." },
-  { year: "2025", title: "Forever Begins", desc: "August 17 — the day they became one." },
+  {
+    year: "2025",
+    title: "Forever Begins",
+    desc: "August 17 — the day they became one.",
+  },
 ];
 
 const SCHEDULE = [
@@ -69,7 +93,11 @@ function Polaroid({
 }) {
   return (
     <div className={`bg-white p-3 pb-8 shadow-xl ${className}`}>
-      <img src={src} alt={caption ?? ""} className="w-full h-full object-cover" />
+      <img
+        src={src}
+        alt={caption ?? ""}
+        className="w-full h-full object-cover"
+      />
       {caption && (
         <p className="mt-2 text-center text-[13px] text-stone-500 font-script">
           {caption}
@@ -81,6 +109,280 @@ function Polaroid({
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.8,
+      smoothWheel: true,
+      syncTouch: false,
+      wheelMultiplier: 0.8,
+      touchMultiplier: 1,
+      lerp: 0.08,
+    });
+
+    let frameId = 0;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      frameId = requestAnimationFrame(raf);
+    };
+
+    frameId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      lenis.destroy();
+    };
+  }, []);
+
+useEffect(() => {
+  const ctx = gsap.context(() => {
+    // ─────────────────────────────
+    // HERO
+    // ─────────────────────────────
+
+    const heroTl = gsap.timeline({
+      defaults: {
+        ease: "power3.out",
+      },
+    });
+
+    heroTl
+      .from(".hero-content > *", {
+        opacity: 0,
+        y: 60,
+        duration: 1.2,
+        stagger: 0.12,
+      })
+      .from(
+        ".hero-note",
+        {
+          opacity: 0,
+          x: 50,
+          duration: 1,
+        },
+        "-=0.7"
+      );
+
+    // Hero parallax
+    gsap.to(".hero-bg", {
+      yPercent: 20,
+      scale: 1.08,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#home",
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.5,
+      },
+    });
+
+    // ─────────────────────────────
+    // FADE + SLIDE REVEALS
+    // ─────────────────────────────
+
+    gsap.utils
+      .toArray<HTMLElement>(".reveal-up")
+      .forEach((el) => {
+        gsap.fromTo(
+          el,
+          {
+            opacity: 0,
+            y: 80,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              end: "top 55%",
+              scrub: 0.8,
+            },
+          }
+        );
+      });
+
+    // ─────────────────────────────
+    // FADE IN / FADE OUT
+    // ─────────────────────────────
+
+    gsap.utils
+      .toArray<HTMLElement>(".fade-section")
+      .forEach((el) => {
+        gsap.fromTo(
+          el,
+          {
+            opacity: 0.15,
+            y: 40,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 90%",
+              end: "top 45%",
+              scrub: 1,
+            },
+          }
+        );
+      });
+
+    // Fade out as element leaves viewport
+    gsap.utils
+      .toArray<HTMLElement>(".fade-out")
+      .forEach((el) => {
+        gsap.to(el, {
+          opacity: 0,
+          y: -40,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el,
+            start: "bottom 70%",
+            end: "bottom 20%",
+            scrub: 1,
+          },
+        });
+      });
+
+    // ─────────────────────────────
+    // IMAGE REVEAL
+    // ─────────────────────────────
+
+    gsap.utils
+      .toArray<HTMLElement>(".image-reveal")
+      .forEach((el) => {
+        gsap.fromTo(
+          el,
+          {
+            opacity: 0,
+            scale: 0.88,
+            y: 80,
+            clipPath: "inset(15% 15% 15% 15%)",
+          },
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: 1.4,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+
+    // ─────────────────────────────
+    // TIMELINE STAGGER
+    // ─────────────────────────────
+
+    gsap.from(".timeline-item", {
+      opacity: 0,
+      y: 50,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "#timeline",
+        start: "top 75%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    // ─────────────────────────────
+    // GALLERY STAGGER
+    // ─────────────────────────────
+
+    gsap.from(".gallery-item", {
+      opacity: 0,
+      scale: 0.8,
+      y: 60,
+      rotation: 5,
+      duration: 1,
+      stagger: 0.12,
+      ease: "back.out(1.4)",
+      scrollTrigger: {
+        trigger: "#gallery",
+        start: "top 75%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    // ─────────────────────────────
+    // SECTION HEADINGS
+    // ─────────────────────────────
+
+    gsap.utils
+      .toArray<HTMLElement>(".section-title")
+      .forEach((el) => {
+        gsap.fromTo(
+          el,
+          {
+            opacity: 0,
+            y: 70,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+
+    // ─────────────────────────────
+    // STORY IMAGE PARALLAX
+    // ─────────────────────────────
+
+    gsap.utils
+      .toArray<HTMLElement>(".parallax-image")
+      .forEach((el) => {
+        gsap.to(el, {
+          yPercent: -12,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.5,
+          },
+        });
+      });
+
+    // ─────────────────────────────
+    // FOOTER
+    // ─────────────────────────────
+
+    gsap.from(".footer-content", {
+      opacity: 0,
+      y: 80,
+      duration: 1.4,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: "footer",
+        start: "top 75%",
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    // Refresh ScrollTrigger after everything is initialized
+    ScrollTrigger.refresh();
+  });
+
+  return () => ctx.revert();
+}, []);
 
   return (
     <div className="bg-[#F6F1E7] text-stone-800 font-sans antialiased">
@@ -96,7 +398,11 @@ export default function App() {
       <header className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 md:px-10 py-6 text-white">
         <nav className="hidden md:flex gap-8 mx-auto text-sm tracking-wide">
           {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="hover:opacity-70 transition-opacity">
+            <a
+              key={l.href}
+              href={l.href}
+              className="hover:opacity-70 transition-opacity"
+            >
               {l.label}
             </a>
           ))}
@@ -106,7 +412,14 @@ export default function App() {
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Toggle menu"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          >
             <path d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
@@ -115,7 +428,11 @@ export default function App() {
 
       {menuOpen && (
         <div className="fixed inset-0 z-40 bg-black/90 flex flex-col items-center justify-center gap-8 text-white text-lg">
-          <button className="absolute top-6 right-6" onClick={() => setMenuOpen(false)} aria-label="Close menu">
+          <button
+            className="absolute top-6 right-6"
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close menu"
+          >
             ✕
           </button>
           {NAV_LINKS.map((l) => (
@@ -129,14 +446,19 @@ export default function App() {
       {/* ───────── HERO ───────── */}
       <section
         id="home"
-        className="relative min-h-screen flex items-center bg-cover bg-center"
-        style={{ backgroundImage: `url(${IMG.hero})` }}
+        className="relative min-h-screen flex items-center overflow-hidden"
       >
+        <div
+          className="hero-bg absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${IMG.hero})` }}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/40" />
-        <div className="relative z-10 px-6 md:px-16 max-w-2xl">
-          <p className="text-xs tracking-[0.25em] text-white/70 mb-4">Our Love Story</p>
-          <h1 className="font-serif-display text-5xl md:text-7xl leading-[1.05] text-white mb-6">
-            12 Years
+        <div className="hero-content fade-out relative z-10 px-6 md:px-16 max-w-2xl">
+          <p className="text-xs tracking-[0.25em] text-white/70 mb-4 reveal-title">
+            Our Love Story
+          </p>
+          <h1 className="font-serif-display text-5xl md:text-7xl leading-[1.05] text-white mb-6 reveal-title">
+            10 Years
             <br />
             of Love
           </h1>
@@ -146,9 +468,11 @@ export default function App() {
             new chapter.
           </p>
           <p className="text-white/90 flex items-center gap-2 text-sm mb-1">
-            Her Name <Heart className="w-3 h-3" /> His Name
+            SOURAV <Heart className="w-3 h-3" /> LAVANYA
           </p>
-          <p className="text-white/60 text-xs tracking-widest mb-8">AUGUST 17, 2025</p>
+          <p className="text-white/60 text-xs tracking-widest mb-8">
+            AUGUST 17, 2025
+          </p>
           <a
             href="#our-story"
             className="inline-block border border-white/70 text-white text-sm px-6 py-3 hover:bg-white hover:text-stone-900 transition-colors"
@@ -164,22 +488,28 @@ export default function App() {
       </section>
 
       {/* ───────── OUR STORY ───────── */}
-      <section id="our-story" className="px-6 md:px-16 py-24 relative overflow-hidden">
+      <section
+        id="our-story"
+        className="fade-section px-6 md:px-16 py-24 relative overflow-hidden"
+      >
         <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
           <div>
-            <p className="text-xs tracking-[0.25em] text-stone-400 mb-3">Our Story</p>
-            <h2 className="font-serif-display text-4xl md:text-5xl text-stone-800 mb-6">
+            <p className="text-xs tracking-[0.25em] text-stone-400 mb-3">
+              Our Story
+            </p>
+            <h2 className="section-title font-serif-display text-4xl md:text-5xl text-stone-800 mb-6">
               Where it all began...
             </h2>
-            <p className="text-stone-600 leading-relaxed mb-5 max-w-md">
-              They met at a tuition centre.
-              <br />
-              Two students. A few conversations.
-              <br />
-              And a connection that neither of them expected.
+            <p className="text-stone-600 leading-relaxed mb-5 max-w-md reveal-up">
+              Eleven years ago, our paths crossed quietly in the ordinary rhythm
+              of an entrance campus tuition centre. No rush, no certainty - just
+              two souls learning to notice each other. Love took its time to
+              find a voice, months of patience, understanding, and silent hope.
+             
             </p>
             <p className="text-stone-500 italic leading-relaxed max-w-md mb-6">
-              What started as an ordinary day became the beginning of a 12-year-long story.
+              What started as an ordinary day became the beginning of a
+              10-year-long story.
             </p>
             <Heart className="w-4 h-4 text-stone-400" />
           </div>
@@ -188,7 +518,7 @@ export default function App() {
             <Polaroid
               src={IMG.story}
               caption="Tuition days... 2016"
-              className="w-80 rotate-2"
+              className="w-80 rotate-2 image-reveal parallax-image"
             />
             <p className="font-script text-lg text-stone-500 absolute -right-2 md:right-4 top-4 hidden lg:block leading-snug">
               Same class,
@@ -204,17 +534,24 @@ export default function App() {
       </section>
 
       {/* ───────── TIMELINE ───────── */}
-      <section id="timeline" className="bg-[#3D1218] text-[#F1E4DE] px-6 md:px-16 py-24">
+      <section
+        id="timeline"
+        className="fade-section bg-[#3D1218] text-[#F1E4DE] px-6 md:px-16 py-24"
+      >
         <div className="max-w-6xl mx-auto">
-          <p className="text-xs tracking-[0.25em] text-[#D9A8A0] mb-3">The Journey</p>
-          <h2 className="font-serif-display text-4xl md:text-5xl mb-2">The 12 Year Timeline</h2>
+          <p className="text-xs tracking-[0.25em] text-[#D9A8A0] mb-3">
+            The Journey
+          </p>
+          <h2 className="section-title font-serif-display text-4xl md:text-5xl mb-2">
+            The 10 Year Timeline
+          </h2>
           <p className="text-[#D9A8A0] mb-16">Different phases. Same love.</p>
 
           <div className="relative">
             <div className="hidden md:block absolute top-2 left-0 right-0 h-px bg-[#7A3C3C]" />
             <div className="grid grid-cols-2 md:grid-cols-5 gap-y-10 gap-x-6">
               {TIMELINE.map((t) => (
-                <div key={t.year} className="relative pt-8">
+                <div key={t.year} className="timeline-item relative pt-8">
                   <span className="hidden md:block absolute -top-[3px] left-0 w-2 h-2 rounded-full bg-[#F1E4DE]" />
                   <p className="font-serif-display text-lg mb-1">{t.year}</p>
                   <p className="text-sm font-medium">{t.title}</p>
@@ -224,17 +561,18 @@ export default function App() {
           </div>
 
           <p className="font-script text-xl text-[#D9A8A0] text-right mt-14 leading-snug">
-            12 years... countless memories... one love. <Heart className="inline w-4 h-4" />
+            10 years... countless memories... one love.{" "}
+            <Heart className="inline w-4 h-4" />
           </p>
         </div>
       </section>
 
       {/* ───────── PHOTO COLLAGE ───────── */}
-      <section className="px-6 md:px-16 py-24">
+      <section className="fade-section px-6 md:px-16 py-24">
         <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center">
           <div>
-            <h2 className="font-serif-display text-4xl md:text-5xl text-stone-800 mb-6">
-              12 Years of Us
+            <h2 className="section-title font-serif-display text-4xl md:text-5xl text-stone-800 mb-6">
+              10 Years of Us
             </h2>
             <p className="text-stone-600 mb-4">
               Some stories are written.
@@ -250,7 +588,9 @@ export default function App() {
               <br />
               Same love.
             </p>
-            <p className="font-script text-xl text-stone-500">12 years. One story. <Heart className="inline w-4 h-4" /></p>
+            <p className="font-script text-xl text-stone-500">
+              10 years. One story. <Heart className="inline w-4 h-4" />
+            </p>
           </div>
 
           <div className="grid grid-cols-3 grid-rows-2 gap-3 max-w-lg mx-auto">
@@ -262,24 +602,29 @@ export default function App() {
       </section>
 
       {/* ───────── WEDDING DAY ───────── */}
-      <section id="wedding-day" className="grid md:grid-cols-2">
+      <section id="wedding-day" className="fade-section grid md:grid-cols-2">
         <div
-          className="min-h-[420px] md:min-h-[600px] bg-cover bg-center"
+          className="image-reveal parallax-image min-h-[420px] md:min-h-[600px] bg-cover bg-center"
           style={{ backgroundImage: `url(${IMG.wedding})` }}
         />
         <div className="bg-[#F6F1E7] px-6 md:px-16 py-16 flex flex-col justify-center">
-          <p className="text-xs tracking-[0.25em] text-stone-400 mb-3">The Wedding Day</p>
-          <h2 className="font-serif-display text-4xl md:text-5xl text-stone-800 mb-5">
+          <p className="text-xs tracking-[0.25em] text-stone-400 mb-3">
+            The Wedding Day
+          </p>
+          <h2 className="section-title font-serif-display text-4xl md:text-5xl text-stone-800 mb-5">
             And then came August 17
           </h2>
           <p className="text-stone-600 mb-8 max-w-sm">
-            After ten years of choosing each other, they finally said, "Forever."
+            After ten years of choosing each other, they finally said,
+            "Forever."
           </p>
 
           <div className="flex gap-8 items-start flex-wrap">
             <div className="border border-stone-300 px-5 py-4 text-center">
               <p className="font-serif-display text-2xl leading-none">17</p>
-              <p className="text-xs tracking-widest text-stone-500 mt-1">AUGUST</p>
+              <p className="text-xs tracking-widest text-stone-500 mt-1">
+                AUGUST
+              </p>
               <p className="text-xs tracking-widest text-stone-500">2025</p>
             </div>
 
@@ -297,11 +642,18 @@ export default function App() {
       </section>
 
       {/* ───────── GALLERY ───────── */}
-      <section id="gallery" className="bg-[#1A1714] text-white px-6 md:px-16 py-24">
+      <section
+        id="gallery"
+        className="fade-section bg-[#1A1714] text-white px-6 md:px-16 py-24"
+      >
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <p className="text-xs tracking-[0.25em] text-white/50 mb-3">The Gallery</p>
-            <h2 className="font-serif-display text-4xl md:text-5xl mb-4">The Little Moments</h2>
+            <p className="text-xs tracking-[0.25em] text-white/50 mb-3">
+              The Gallery
+            </p>
+            <h2 className="section-title font-serif-display text-4xl md:text-5xl mb-4">
+              The Little Moments
+            </h2>
             <p className="text-white/60 mb-8 max-w-xs">
               The smiles. The tears. The chaos. The love.
             </p>
@@ -314,25 +666,29 @@ export default function App() {
           </div>
 
           <div className="flex gap-3 overflow-x-auto md:overflow-visible">
-            {[IMG.gallery1, IMG.gallery2, IMG.gallery3, IMG.gallery4].map((src, i) => (
-              <Polaroid
-                key={i}
-                src={src}
-                className={`w-32 md:w-36 shrink-0 ${i % 2 ? "rotate-3" : "-rotate-2"}`}
-              />
-            ))}
+            {[IMG.gallery1, IMG.gallery2, IMG.gallery3, IMG.gallery4].map(
+              (src, i) => (
+                <Polaroid
+                  key={i}
+                  src={src}
+                  className={`gallery-item w-32 md:w-36 shrink-0 ${i % 2 ? "rotate-3" : "-rotate-2"}`}
+                />
+              ),
+            )}
           </div>
         </div>
       </section>
 
       {/* ───────── FOOTER ───────── */}
       <footer
-        className="relative min-h-[420px] flex items-center justify-center bg-cover bg-center text-center px-6"
+        className="fade-section relative min-h-[420px] flex items-center justify-center bg-cover bg-center text-center px-6"
         style={{ backgroundImage: `url(${IMG.footer})` }}
       >
         <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 text-white max-w-lg">
-          <p className="text-sm tracking-widest mb-4 text-white/80">2016 → 2026</p>
+        <div className="footer-content relative z-10 text-white max-w-lg">
+          <p className="text-sm tracking-widest mb-4 text-white/80">
+            2016 → 2026
+          </p>
           <p className="font-script text-2xl leading-relaxed mb-6">
             They started with a hello.
             <br />
@@ -343,7 +699,9 @@ export default function App() {
           <p className="flex items-center justify-center gap-2 text-sm mb-1">
             Her Name <Heart className="w-3 h-3" /> His Name
           </p>
-          <p className="text-white/60 text-xs tracking-widest">AUGUST 17, 2025</p>
+          <p className="text-white/60 text-xs tracking-widest">
+            AUGUST 17, 2025
+          </p>
         </div>
         <p className="hidden md:block font-script text-lg text-white/70 absolute bottom-10 right-10 text-right leading-tight">
           Thank you for being

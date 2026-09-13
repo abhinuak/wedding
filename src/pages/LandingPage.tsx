@@ -1,10 +1,8 @@
-function LandingPage() {
 
 
+const LandingPage = () => {
   return (
-    <>
-      <h1>SOURAV & LAVANYA</h1>
-    </>
+    <div>LandingPage</div>
   )
 }
 
